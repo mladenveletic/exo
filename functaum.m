@@ -1,0 +1,3 @@
+function outcome = functaum(Vm, taumVx, Vtaumx, Staumx, taum0x)
+outcome = taumVx./(exp(-(Vm-Vtaumx)./Staumx) + ...
+    exp((Vm-Vtaumx)./Staumx)) + taum0x;
