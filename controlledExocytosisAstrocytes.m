@@ -20,16 +20,16 @@ offset = 12500;
 % Time constants given in [ms]
 % Capacitance given in [\muF/cm^2]
 % Parameters from alpha cells
-VCa = 65; 
-gCaL = 0.7; 
+VCa = 65;
+gCaL = 0.7;
 gCaPQ = 0.6;
 gCaT = 0.4;
 VmCaL = -30;
-VmCaPQ = -5; 
+VmCaPQ = -5;
 SmCaL = 10;
-SmCaPQ = 10; 
-VhCaL = -33; 
-VhCaPQ = -33; 
+SmCaPQ = 10;
+VhCaL = -33;
+VhCaPQ = -33;
 ShCaL = -5;
 ShCaPQ = -5;
 taumVCaL = 1;
@@ -69,7 +69,7 @@ taumVKa = 0;
 taum0Ka = 0.1;
 tauhVKa = 60;
 tauh0Ka = 5;
-VtauhKa = 5; 
+VtauhKa = 5;
 StauhKa = 20;
 VtaumK = -10;
 StaumK = 25;
@@ -81,11 +81,11 @@ NPQ = 200;
 Bmud = 264;         % [1/ms]
 kPMCA = 0.3;        % [1/ms]
 nPQ = 4;
-nL = 4; 
+nL = 4;
 nm = 4;
 alpha = 5.18e-15;   % [\mumol/pA/ms]
 Volm = 5.149e-14;   % [L]
-NL = 200;           
+NL = 200;
 Bm = 0.128;         % [1/ms]
 KPQ = 2;
 KL = 50;            % [muM]
@@ -93,15 +93,15 @@ Km = 2;             % [muM]
 % Nominal values for calcium dynamics in astrocytes
 MS = 1e3;
 c0 = 2;             % [muM]
-c1 = 0.185;   
+c1 = 0.185;
 v1 = 6/MS;          % [1/ms]
 v2 = 0.11/MS;       % [1/ms]
 v3 = 0.9/MS;        % [muM/ms]
 k3 = 0.1;           % [muM]
-d1 = 0.13;   
-d2 = 1.049;  
-d3 = 0.943;  
-d5 = 0.082;  
+d1 = 0.13;
+d2 = 1.049;
+d3 = 0.943;
+d5 = 0.082;
 a2 = 0.5/MS;        % [1/(muM ms)]
 r_IP = 0.04/MS;        % [muM/ms]
 tau_IP = 1/0.000140;% [ms]
@@ -114,7 +114,7 @@ tau_IP = 1/0.000140;% [ms]
 % x(6) = hCaT;
 % x(7) = CaL;
 % x(8) = CaPQ;
-% x(9) = Cam;  
+% x(9) = Cam;
 % x(10) = Cac;  -->modified according to Li-Rinzel model
 % x(11) = Caer; -->modified according to Li-Rinzel model
 % x(12) = IP3;  -->added according to Li-Rinzel model
@@ -122,24 +122,24 @@ tau_IP = 1/0.000140;% [ms]
 %--------------------------------------------------------------------------
 pot = -70; % Resting potential
 f1 = @(t,x) [
-(funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VmCaL, SmCaL) - x(1))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), taumVCaL, VtaumCaL, StaumCaL, taum0CaL);
-(funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VmCaPQ, SmCaPQ) - x(2))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), taumVCaPQ, VtaumCaPQ, StaumCaPQ, taum0CaPQ);
-(funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VmCaT, SmCaT) - x(3))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), taumVCaT, VtaumCaT, StaumCaT, taum0CaT);
-(funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VhCaL, ShCaL) - x(4))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), tauhVCaL, VtauhCaL, StauhCaL, tauh0CaL);
-(funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VhCaPQ, ShCaPQ) - x(5))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), tauhVCaPQ, VtauhCaPQ, StauhCaPQ, tauh0CaPQ);
-(funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VhCaT, ShCaT) - x(6))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), tauhVCaT, VtauhCaT, StauhCaT, tauh0CaT);
-(-f*alpha*gCaL.*(pot+controlSignal(t,amp,time,step,npulse,offset)-VCa)./NL./Volmud - f*Bmud*(x(7)-x(9)));
-(-f*alpha*gCaPQ.*(pot+controlSignal(t,amp,time,step,npulse,offset)-VCa)./NPQ./Volmud - f*Bmud*(x(8)-x(9)));
-(f*(-alpha*(gCaT.*x(3)^3*x(6)*(pot+controlSignal(t,amp,time,step,npulse,offset)-VCa))/Volm + NPQ*Volmud/Volm*Bmud*x(2)*x(5)*(x(8)-x(9)) + NL*Volmud/Volm*Bmud*x(1)^2*x(4)*(x(7)-x(9)) - Volc/Volm*kPMCA*x(9) + Volc/Volm*Bm*(x(9)-x(10))));
--c1*v1*(x(12)/(x(12)+d1)*x(10)/(x(10)+d5))^3*x(13)^3*(x(10)-x(11)) - c1*v2*(x(10)-x(11)) - v3*x(10)^2/(k3^2+x(10)^2);
--1/c1*(-c1*v1*(x(12)/(x(12)+d1)*x(10)/(x(10)+d5))^3*x(13)^3*(x(10)-x(11)) - c1*v2*(x(10)-x(11)) - v3*x(10)^2/(k3^2+x(10)^2));
-(IP0 - x(12))/tau_IP + r_IP*controlSignal(t,amp,time,step,npulse,offset);
-a2*d2*(x(12)+d1)/(x(12)+d3)*(1-x(13)) - a2*x(10)*x(13);
-];
+    (funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VmCaL, SmCaL) - x(1))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), taumVCaL, VtaumCaL, StaumCaL, taum0CaL);
+    (funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VmCaPQ, SmCaPQ) - x(2))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), taumVCaPQ, VtaumCaPQ, StaumCaPQ, taum0CaPQ);
+    (funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VmCaT, SmCaT) - x(3))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), taumVCaT, VtaumCaT, StaumCaT, taum0CaT);
+    (funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VhCaL, ShCaL) - x(4))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), tauhVCaL, VtauhCaL, StauhCaL, tauh0CaL);
+    (funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VhCaPQ, ShCaPQ) - x(5))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), tauhVCaPQ, VtauhCaPQ, StauhCaPQ, tauh0CaPQ);
+    (funcminf(pot+controlSignal(t,amp,time,step,npulse,offset), VhCaT, ShCaT) - x(6))./functaum(pot+controlSignal(t,amp,time,step,npulse,offset), tauhVCaT, VtauhCaT, StauhCaT, tauh0CaT);
+    (-f*alpha*gCaL.*(pot+controlSignal(t,amp,time,step,npulse,offset)-VCa)./NL./Volmud - f*Bmud*(x(7)-x(9)));
+    (-f*alpha*gCaPQ.*(pot+controlSignal(t,amp,time,step,npulse,offset)-VCa)./NPQ./Volmud - f*Bmud*(x(8)-x(9)));
+    (f*(-alpha*(gCaT.*x(3)^3*x(6)*(pot+controlSignal(t,amp,time,step,npulse,offset)-VCa))/Volm + NPQ*Volmud/Volm*Bmud*x(2)*x(5)*(x(8)-x(9)) + NL*Volmud/Volm*Bmud*x(1)^2*x(4)*(x(7)-x(9)) - Volc/Volm*kPMCA*x(9) + Volc/Volm*Bm*(x(9)-x(10))));
+    -c1*v1*(x(12)/(x(12)+d1)*x(10)/(x(10)+d5))^3*x(13)^3*(x(10)-x(11)) - c1*v2*(x(10)-x(11)) - v3*x(10)^2/(k3^2+x(10)^2);
+    -1/c1*(-c1*v1*(x(12)/(x(12)+d1)*x(10)/(x(10)+d5))^3*x(13)^3*(x(10)-x(11)) - c1*v2*(x(10)-x(11)) - v3*x(10)^2/(k3^2+x(10)^2));
+    (IP0 - x(12))/tau_IP + r_IP*controlSignal(t,amp,time,step,npulse,offset);
+    a2*d2*(x(12)+d1)/(x(12)+d3)*(1-x(13)) - a2*x(10)*x(13);
+    ];
 % ODE with initial condition
 xinit = [zeros(1,10) c0/c1 IP0 0];
 t_start = tic;
-% Tim Franklin (2020). ODE Progress Bar and Interrupt (https://www.mathworks.com/matlabcentral/fileexchange/9904-ode-progress-bar-and-interrupt), MATLAB Central File Exchange. Retrieved January 16, 2020.
+% Tim Franklin Acknowledged for providing odeprog tool
 options=odeset('RelTol',1e-3,'AbsTol',1e-4,'InitialStep',0.001,'MaxStep',30,...
     'OutputFcn',@odeprog,'Events',@odeabort);
 [t1, sol] = ode15s(f1, time, xinit, options);
@@ -148,7 +148,7 @@ fprintf('\n     [ OK ]');
 fprintf('\n     Elapsed %.4f s',t_end)
 %% Control Signal & Plasma Membrane Potential
 Vm = controlSignal(t1,amp,time,step,npulse,offset);
-figure, 
+figure,
 subplot(2,1,1), plot(t1, Vm, 'LineWidth', 1); hold on, grid minor,
 title('Control signal', 'Interpreter', 'latex', 'FontSize', 14);
 xlabel('Time [ms]', 'Interpreter', 'latex', 'FontSize', 14);
@@ -160,7 +160,7 @@ xlabel('Time [ms]', 'Interpreter', 'latex', 'FontSize', 14);
 ylabel('$[\mathrm{IP}_3]$ [$\mu$mol/L]', 'Interpreter', 'latex', 'FontSize', 14);
 %% Activation and Inactivation Functions from ODEs
 % Activation Functions
-mCaL = sol(:,1); 
+mCaL = sol(:,1);
 mCaPQ = sol(:,2);
 mCaT = sol(:,3);
 mIP3inf = sol(:,12)./(sol(:,12)+d1).*sol(:,10)./(sol(:,10)+d5);
@@ -175,7 +175,7 @@ CaPQo = sol(:,8);
 Cam = sol(:,9);
 Cac = sol(:,10);
 Caer = sol(:,11);
-figure, 
+figure,
 subplot(3,2,1), plot(t1, CaLo, 'LineWidth', 1); hold on, grid minor,
 title('$[\mathrm{Ca}]_{L}$', 'Interpreter', 'latex', 'FontSize', 14);
 xlabel('Time [ms]', 'Interpreter', 'latex', 'FontSize', 14);
@@ -204,27 +204,27 @@ rateCaPQ = mCaPQ.*hCaPQ.*(CaPQo.^nPQ)./(CaPQo.^nPQ + KPQ.^nPQ) + ...
     (1 - mCaPQ.*hCaPQ).*(Cam.^nPQ)./(Cam.^nPQ + KPQ.^nPQ);
 rateCam = (Cam.^Km)./(Cam.^nm + Km.^nm);
 figure,
-subplot(2,2,1), 
+subplot(2,2,1),
 plot(t1, rateCaL, 'LineWidth', 1, 'LineStyle', '--'); hold on, grid minor,
 xlabel('Time [ms]', 'Interpreter', 'latex', 'FontSize', 14);
 ylabel('$\mu$mol/L/ms', 'Interpreter', 'latex', 'FontSize', 14);
 title('$\mathcal{R}_{\mathrm{Ca}_L}$','Interpreter', 'latex','FontSize', 14);
-subplot(2,2,2), 
+subplot(2,2,2),
 plot(t1, rateCaPQ, 'LineWidth', 1, 'LineStyle', '-'); hold on, grid minor,
 xlabel('Time [ms]', 'Interpreter', 'latex', 'FontSize', 14);
 ylabel('$\mu$mol/L/ms', 'Interpreter', 'latex', 'FontSize', 14);
 title('$\mathcal{R}_{\mathrm{Ca}_{N}}$','Interpreter', 'latex','FontSize', 14);
-subplot(2,2,3), 
+subplot(2,2,3),
 plot(t1, rateCam, 'LineWidth', 1, 'LineStyle', '-.'); hold on, grid minor,
 xlabel('Time [ms]', 'Interpreter', 'latex', 'FontSize', 14);
 ylabel('$\mu$mol/L/ms', 'Interpreter', 'latex', 'FontSize', 14);
 title('$\mathcal{R}_{\mathrm{Ca}_m}$','Interpreter', 'latex','FontSize', 14);
-subplot(2,2,4), 
+subplot(2,2,4),
 plot(t1, (rateCaL+rateCaPQ+rateCam), 'LineWidth', 2); hold on, grid minor,
 xlabel('Time [ms]', 'Interpreter', 'latex', 'FontSize', 14);
 title('$\mathcal{R}^{\mathrm{(astro)}}$', 'Interpreter', 'latex','FontSize', 14);
 %% Released Concentrations
-cExoL = zeros(size(rateCaL));      
+cExoL = zeros(size(rateCaL));
 cExoPQ = zeros(size(rateCaPQ));
 cExom = zeros(size(rateCam));
 for i = 1:length(rateCaL)
