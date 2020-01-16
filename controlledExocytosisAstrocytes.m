@@ -139,7 +139,7 @@ a2*d2*(x(12)+d1)/(x(12)+d3)*(1-x(13)) - a2*x(10)*x(13);
 % ODE with initial condition
 xinit = [zeros(1,10) c0/c1 IP0 0];
 t_start = tic;
-% Tim Franklin Acknowledged for providing odeprog tool
+% Tim Franklin (2020). ODE Progress Bar and Interrupt (https://www.mathworks.com/matlabcentral/fileexchange/9904-ode-progress-bar-and-interrupt), MATLAB Central File Exchange. Retrieved January 16, 2020.
 options=odeset('RelTol',1e-3,'AbsTol',1e-4,'InitialStep',0.001,'MaxStep',30,...
     'OutputFcn',@odeprog,'Events',@odeabort);
 [t1, sol] = ode15s(f1, time, xinit, options);
